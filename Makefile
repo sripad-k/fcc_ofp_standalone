@@ -23,6 +23,25 @@ BUILD_DIR = build
 INCLUDES = \
     -I$(BSP_DIR)/include \
     -I$(APP_DIR) \
+    -I$(APP_DIR)/ach \
+    -I$(APP_DIR)/bsp_srv \
+    -I$(APP_DIR)/bsp_srv/can \
+    -I$(APP_DIR)/bsp_srv/gpio \
+    -I$(APP_DIR)/bsp_srv/interface \
+    -I$(APP_DIR)/bsp_srv/pwm \
+    -I$(APP_DIR)/bsp_srv/sys_srv \
+    -I$(APP_DIR)/bsp_srv/timer \
+    -I$(APP_DIR)/bsp_srv/uart \
+    -I$(APP_DIR)/bsp_srv/udp \
+    -I$(APP_DIR)/config \
+    -I$(APP_DIR)/da \
+    -I$(APP_DIR)/fcs_mi \
+    -I$(APP_DIR)/fcs_mi/fcs_autogen \
+    -I$(APP_DIR)/mavlink_io \
+    -I$(APP_DIR)/mavlink_io/mavlink/include \
+    -I$(APP_DIR)/mavlink_io/serdes \
+    -I$(APP_DIR)/types \
+    -I$(APP_DIR)/utils \
     -I$(LRU_DIR) \
     -I$(LRU_DIR)/driver \
     -I$(LRU_DIR)/kernel \
@@ -30,22 +49,34 @@ INCLUDES = \
     -I$(LRU_DIR)/sru
 
 # --------------------------------------------------------------------
+# Defines
+# --------------------------------------------------------------------
+DEFINES = \
+    -DARMR5 \
+    -DPLATFORM_FC200 \
+    -DADC_9 \
+    -DNO_SYS=1 \
+    -DLWIP_NOASSERT \
+    -D_SYS__STDINT_H_
+
+# --------------------------------------------------------------------
 # Flags
 # --------------------------------------------------------------------
 CPU_FLAGS = -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mfloat-abi=hard -marm
 
-CFLAGS := -O0 -g -Wall -Wextra -ffreestanding $(CPU_FLAGS) -DARMv5 \
-          -DNO_SYS=1 -DLWIP_NOASSERT $(INCLUDES)
+CFLAGS := -O0 -g -Wall -Wextra -ffreestanding $(CPU_FLAGS) \
+          $(DEFINES) $(INCLUDES)
 
 ASFLAGS := $(CPU_FLAGS) -g $(INCLUDES)
 
 LDFLAGS := -T $(LINKER) -Wl,--gc-sections,-Map=$(BUILD_DIR)/app.map \
-           -L$(BSP_DIR)/lib -lxil -llwip4 $(CPU_FLAGS)
+           -L$(BSP_DIR)/lib -llwip4 -lxil -lm $(CPU_FLAGS)
 
 # --------------------------------------------------------------------
 # Source discovery
 # --------------------------------------------------------------------
-APP_SRC     = $(wildcard $(APP_DIR)/*.c)
+# Find all .c files recursively under application/app/
+APP_SRC     = $(shell find $(APP_DIR) -name "*.c")
 DRIVER_SRC  = $(shell find $(LRU_DIR)/driver -name "*.c")
 KERNEL_SRC  = $(shell find $(LRU_DIR)/kernel -name "*.c")
 SOC_SRC     = $(shell find $(LRU_DIR)/soc -name "*.c" -o -name "*.s" -o -name "*.S")
@@ -59,9 +90,9 @@ OBJ = $(patsubst %.c, $(BUILD_DIR)/%.o, $(SRC))
 OBJ := $(patsubst %.s, $(BUILD_DIR)/%.o, $(OBJ))
 OBJ := $(patsubst %.S, $(BUILD_DIR)/%.o, $(OBJ))
 
-TARGET = $(BUILD_DIR)/app.elf
-BIN    = $(BUILD_DIR)/app.bin
-HEX    = $(BUILD_DIR)/app.hex
+TARGET = $(BUILD_DIR)/fcc_ofp.elf
+BIN    = $(BUILD_DIR)/fcc_ofp.bin
+HEX    = $(BUILD_DIR)/fcc_ofp.hex
 
 # --------------------------------------------------------------------
 # Rules
@@ -108,3 +139,13 @@ clean:
 
 # Include dependency files if they exist
 -include $(OBJ:.o=.d)
+
+# Optional: Print source files and defines (for debugging)
+.PHONY: print-sources print-defines
+print-sources:
+	@echo "Application sources:"
+	@echo "$(APP_SRC)" | tr ' ' '\n'
+
+print-defines:
+	@echo "Defined symbols:"
+	@echo "$(DEFINES)" | tr ' ' '\n'
