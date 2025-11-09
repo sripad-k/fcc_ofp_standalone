@@ -55,8 +55,6 @@ DEFINES = \
     -DARMR5 \
     -DPLATFORM_FC200 \
     -DADC_9 \
-    -DNO_SYS=1 \
-    -DLWIP_NOASSERT \
     -D_SYS__STDINT_H_
 
 # --------------------------------------------------------------------
