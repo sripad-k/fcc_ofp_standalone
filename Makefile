@@ -25,15 +25,15 @@ SYSROOT        := $(TOOLCHAIN_ROOT)/armrm-xilinx-eabi/usr
 GCC_VER_PATH   := $(TOOLCHAIN_ROOT)/x86_64-oesdk-linux/usr/lib/arm-xilinx-eabi/gcc/arm-xilinx-eabi/9.2.0
 
 # Multilib directory for hard-float ARM v7
-MULTILIB_DIR := thumb/v7+fp/hard/
+MULTILIB_DIR := thumb/v7+fp/hard
 
 # CRT files
 CRT_DIR := $(SYSROOT)/lib/$(MULTILIB_DIR)
-CRT0    := $(CRT_DIR)crt0.o
-CRTI    := $(CRT_DIR)crti.o
-CRTN    := $(CRT_DIR)crtn.o
-CRTBEGIN := $(CRT_DIR)crtbegin.o
-CRTEND   := $(CRT_DIR)crtend.o
+CRT0    := $(CRT_DIR)/crt0.o
+CRTI    := $(CRT_DIR)/crti.o
+CRTN    := $(CRT_DIR)/crtn.o
+CRTBEGIN := $(CRT_DIR)/crtbegin.o
+CRTEND   := $(CRT_DIR)/crtend.o
 
 # --------------------------------------------------------------------
 # Compilation flags
