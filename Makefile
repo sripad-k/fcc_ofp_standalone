@@ -48,10 +48,11 @@ CFLAGS := -O0 -g3 -Wall -Wextra -ffreestanding \
 ASFLAGS := -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mfloat-abi=hard -g
 
 LDFLAGS := -T $(LINKER) \
-           -Wl,--gc-sections,-Map=$(BUILD_DIR)/app.map \
+           -Wl,--gc-sections,-Map=$(BUILD_DIR)/fcc_ofp.map \
            --sysroot=$(SYSROOT) \
            -L$(BSP_DIR)/lib \
            -L$(CRT_DIR) \
+           $(CRT0) \
            $(CRTI) \
            $(CRTBEGIN) \
            -nostartfiles \
@@ -60,7 +61,7 @@ LDFLAGS := -T $(LINKER) \
            -Wl,--end-group \
            $(CRTEND) \
            $(CRTN) \
-           -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mfloat-abi=hard
+           -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16
 
 # --------------------------------------------------------------------
 # Includes (project-specific)
