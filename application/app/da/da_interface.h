@@ -62,6 +62,8 @@ bool da_get_ins_il_accel_invalid(void);
 
 bool da_get_ins_il_pos_invalid(void);
 
+/*-------------------------------- INS-2 GETTERS ----------------------------------*/
+
 /*--------------------------------ADC 9 GETTERS -------------------------------------*/
 bool da_get_adc_9_data(adc_data_type_t signal_name, float *data);
 
@@ -79,9 +81,11 @@ bool da_get_adc_9_alt(float *alt); // return value shows validity
 
 bool da_get_adc_9_timeout(void); // return value shows validity
 
+/*--------------------------------ADC 2 GETTERS -----------------------------------*/
+
 /*--------------------------------- RADALT GETTERS ----------------------------------*/
 bool da_get_radalt_timeout(void);
-bool da_get_radalt_data(float *agl);
+bool da_get_radalt_data(float *agl, float *snr);
 
 /*--------------------------------- SBUS GETTERS ------------------------------------*/
 bool da_get_sbus_timeout(void);

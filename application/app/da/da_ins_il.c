@@ -606,12 +606,6 @@ bool da_ins_il_init(void)
 
     /* Initialize the INS UART Port */
     init_status = uart_init(UART_INS);
-
-    /* If initialization is successful */
-    if(init_status == true)
-    {
-    	uart_write(UART_INS, (uint8_t *)"INS ONLINE\r\n", 15);
-    }
     util_memset(&OpvtRawData, 0, sizeof(s_da_ins_opvt_t));
     util_memset(&UddRawData, 0, sizeof(s_da_ins_udd_t));
     timer_start(&InsMonitorTimer, INS_PERIODIC_TIMEOUT);
@@ -748,8 +742,6 @@ static void da_ins_il_parse_data(const uint8_t *ptr_byte)
     static uint8_t payload_len = 0;
     static uint8_t payload_index = 0;
     bool valid_msg_id = false;
-
-    // printf(" Byte = 0x%02X\r\n", *ptr_byte);
 
     if (ptr_byte != NULL)
     {
@@ -1027,7 +1019,7 @@ static void da_ins_il_decode(void)
 
         /* ----------------------------------- Extraction ------------------------------ */
 
-        /* Table 6.29. Payload of the â€œUser Defined Dataâ€� */
+        /* Table 6.29. Payload of the “User Defined Data” */
         /*
         Field           Offset in payload,      Size,            Value
                              bytes               bytes
